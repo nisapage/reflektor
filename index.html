@@ -11,8 +11,6 @@
             --text: #ecf0f1;
             --accent: #f39c12;
             --blue: #38bdf8;
-            --green: #2ecc71;
-            --purple: #9b59b6;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,7 +22,6 @@
         .container { max-width: 900px; width: 100%; }
         h1 { text-align: center; color: var(--accent); margin-top: 0; font-size: 24px; }
         
-        /* Tombol Pilih Mode */
         .mode-buttons {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 10px; margin-bottom: 20px;
@@ -40,7 +37,6 @@
             box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
         }
 
-        /* Area Kanvas Visual */
         .canvas-box {
             position: relative; width: 100%; height: 350px;
             background: radial-gradient(circle at center, #1a253a 0%, #05080f 100%);
@@ -49,14 +45,13 @@
         }
         canvas { width: 100%; height: 100%; display: block; }
         
-        /* Box Penjelasan */
         .desc-box {
             background: var(--panel); padding: 20px; border-radius: 12px;
             border-left: 5px solid var(--accent); border: 1px solid #30363d;
             border-left-width: 5px;
         }
         .desc-box h2 { margin-top: 0; color: var(--blue); font-size: 18px; }
-        .desc-box p { line-height: 1.6; color: #c9d1d9; font-size: 14px; }
+        .desc-box p { line-height: 1.6; color: #c9d1d9; font-size: 14px; margin-bottom: 0; }
         .tag {
             display: inline-block; background: #30363d; color: var(--accent);
             padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-bottom: 10px;
@@ -68,7 +63,6 @@
 <div class="container">
     <h1>🔭 Animasi Jalur Cahaya Teleskop Reflektor</h1>
 
-    <!-- 5 Tombol Mode Sesuai Gambar Slide -->
     <div class="mode-buttons">
         <button class="btn-mode active" onclick="setMode('prime')" id="btn-prime">a. Prime Focus</button>
         <button class="btn-mode" onclick="setMode('newton')" id="btn-newton">b. Newtonian Focus</button>
@@ -77,12 +71,10 @@
         <button class="btn-mode" onclick="setMode('sc')" id="btn-sc">e. Schmidt-Cassegrain</button>
     </div>
 
-    <!-- Kanvas Animasi -->
     <div class="canvas-box">
         <canvas id="opticsCanvas" width="850" height="350"></canvas>
     </div>
 
-    <!-- Penjelasan Detail -->
     <div class="desc-box" id="desc-content"></div>
 </div>
 
@@ -93,28 +85,28 @@
     let mode = 'prime';
     let photons = [];
 
-    // Data Penjelasan Sesuai Slidemu
+    // PERBAIKAN: Penambahan koma yang hilang sebelumnya
     const descData = {
         prime: {
             title: "(a) Fokus Prime (Prime Focus)",
             tag: "Paling Terang • Tanpa Cermin Pembantu",
             text: "Cahaya dari bintang di kiri meluncur lurus mengenai cermin utama parabola di kanan, lalu dipantulkan dan berkumpul di titik fokus di bagian depan tabung. Sensor kamera atau instrumen langsung ditaruh di titik fokus depan ini. Sangat efisien karena tidak ada cahaya yang hilang akibat pantulan kedua!"
-        }
+        },
         newton: {
             title: "(b) Fokus Newtonian (Newtonian Focus)",
             tag: "Rancangan Isaac Newton • Intip dari Samping Atas",
             text: "Sebelum cahaya dari cermin utama sempat berkumpul di depan, dipasang cermin datar kecil yang dimiringkan 45 derajat di tengah tabung. Cermin miring ini membelokkan cahaya ke samping tabung! Kita jadi bisa melihat lewat lensa okuler (Eyepiece) dari samping depan teleskop dengan nyaman."
-        }
+        },
         cassegrain: {
             title: "(c) Fokus Cassegrain (Cassegrain Focus)",
             tag: "Intip dari Belakang • Tabung Ringkas",
             text: "Cermin utama di bagian belakang dilubangi tepat di tengahnya. Di depan dipasang cermin pembantu cembung. Cahaya dipantulkan dari belakang -> mengenai cermin depan -> lalu dipantulkan balik ke belakang menembus lubang! Kita bisa mengintip dari paling belakang tabung seperti lensa kamera biasa."
-        }
+        },
         schmidt: {
             title: "(d) Kamera Schmidt (Schmidt Camera - dengan Lensa Korektor)",
             tag: "Lensa + Cermin • Khusus Astrofotografi",
             text: "Menggunakan cermin utama berbentuk bola (Spherical) yang gampang dibuat tapi punya cacat fokus. Untuk memperbaikinya, dipasang lensa kaca tipis (Correcting Lens) di depan tabung untuk 'merapikan' cahaya masuk sebelum mengenai cermin. Hasilnya fokus sangat tajam di permukaan melengkung di dalam tabung."
-        }
+        },
         sc: {
             title: "(e) Schmidt-Cassegrain (Gabungan Lensa & Cassegrain)",
             tag: "Teleskop Modern Paling Populer",
@@ -136,21 +128,16 @@
         initPhotons();
     }
 
-    // Inisialisasi Partikel Cahaya (Foton)
     function initPhotons() {
         photons = [];
-        const ys = [70, 105, 140, 210, 245, 280]; // 6 berkas cahaya sejajar dari kiri
+        const ys = [70, 105, 140, 210, 245, 280]; 
         ys.forEach(y => {
             photons.push({ x: 10, y: y, startY: y, stage: 0, speed: 4 });
         });
     }
 
-    // Gambar Tabung Teleskop & Elemen Optik
     function drawOptics() {
-        const w = canvas.width;
-        const h = canvas.height;
-
-        // Gambar dinding tabung teleskop (garis bantu putus-putus)
+        // Garis bantu dinding tabung teleskop
         ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 5]);
@@ -160,7 +147,7 @@
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // 1. Gambar Lensa Korektor (Khusus mode Schmidt & Schmidt-Cassegrain)
+        // 1. Lensa Korektor (Khusus Schmidt & Schmidt-Cassegrain)
         if (mode === 'schmidt' || mode === 'sc') {
             ctx.fillStyle = "rgba(56, 189, 248, 0.3)";
             ctx.strokeStyle = "#38bdf8";
@@ -173,84 +160,76 @@
             ctx.closePath();
             ctx.fill(); ctx.stroke();
             ctx.fillStyle = "#38bdf8"; ctx.font = "11px sans-serif";
-            ctx.fillText("Lensa Korektor", 90, 35);
+            ctx.fillText("Lensa Korektor", 85, 30);
         }
 
-        // 2. Gambar Cermin Utama di Kanan (Melengkung)
+        // 2. Cermin Utama di Kanan
         ctx.strokeStyle = "#ecf0f1";
         ctx.lineWidth = 6;
         ctx.beginPath();
         if (mode === 'cassegrain' || mode === 'sc') {
-            // Cermin berlubang di tengah (ada gap dari Y=155 ke 195)
+            // Cermin berlubang di tengah
             ctx.arc(950, 175, 220, Math.PI - 0.65, Math.PI - 0.08, false);
             ctx.stroke();
             ctx.beginPath();
             ctx.arc(950, 175, 220, Math.PI + 0.08, Math.PI + 0.65, false);
             ctx.stroke();
             
-            // Gambar Eyepiece / Okuler di belakang lubang
+            // Eyepiece di belakang lubang
             ctx.fillStyle = "#e67e22";
             ctx.fillRect(750, 160, 40, 30);
             ctx.fillStyle = "#fff"; ctx.font = "11px sans-serif";
-            ctx.fillText("Mata (Okuler)", 755, 205);
+            ctx.fillText("Mata (Okuler)", 750, 205);
         } else {
-            // Cermin utuh tanpa lubang
+            // Cermin utuh
             ctx.arc(950, 175, 220, Math.PI - 0.65, Math.PI + 0.65, false);
             ctx.stroke();
         }
         ctx.fillStyle = "#aaa"; ctx.font = "12px sans-serif";
-        ctx.fillText("Cermin Utama", 720, 330);
+        ctx.fillText("Cermin Utama", 690, 335);
 
-        // 3. Gambar Cermin Pembantu & Sensor sesuai mode
+        // 3. Elemen Sekunder & Sensor
         if (mode === 'prime') {
-            // Sensor/Kamera di titik fokus depan
             ctx.fillStyle = "#e74c3c";
             ctx.fillRect(300, 150, 20, 50);
             ctx.fillStyle = "#fff"; ctx.font = "11px sans-serif";
             ctx.fillText("Kamera / Sensor", 265, 140);
         }
         else if (mode === 'newton') {
-            // Cermin datar miring 45 derajat
             ctx.strokeStyle = "#f1c40f"; ctx.lineWidth = 4;
             ctx.beginPath(); ctx.moveTo(430, 200); ctx.lineTo(470, 150); ctx.stroke();
             
-            // Eyepiece di samping atas tabung
             ctx.fillStyle = "#e67e22";
             ctx.fillRect(435, 10, 30, 30);
             ctx.fillStyle = "#fff"; ctx.font = "11px sans-serif";
             ctx.fillText("Mata (Okuler)", 415, 53);
         }
         else if (mode === 'cassegrain' || mode === 'sc') {
-            // Cermin cembung pembantu di depan
             ctx.strokeStyle = "#2ecc71"; ctx.lineWidth = 5;
             ctx.beginPath();
             ctx.arc(260, 175, 50, -0.6, 0.6, false);
             ctx.stroke();
             ctx.fillStyle = "#2ecc71"; ctx.font = "11px sans-serif";
-            ctx.fillText("Cermin Sekunder", 260, 130);
+            ctx.fillText("Cermin Sekunder", 220, 130);
         }
         else if (mode === 'schmidt') {
-            // Film / Sensor lengkung di tengah tabung
             ctx.strokeStyle = "#e74c3c"; ctx.lineWidth = 4;
             ctx.beginPath(); ctx.arc(380, 175, 40, -0.7, 0.7, false); ctx.stroke();
             ctx.fillStyle = "#fff"; ctx.font = "11px sans-serif";
-            ctx.fillText("Permukaan Fokus (Sensor)", 310, 130);
+            ctx.fillText("Permukaan Sensor", 310, 130);
         }
     }
 
-    // Animasi Pergerakan Cahaya (Foton)
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawOptics();
 
-        // Gambar berkas cahaya (Garis kuning dari kiri)
         ctx.fillStyle = "rgba(241, 196, 15, 0.1)";
         ctx.fillRect(0, 60, 120, 230);
         ctx.fillStyle = "#f1c40f"; ctx.font = "13px sans-serif";
         ctx.fillText("⬇️ Cahaya Bintang Masuk", 20, 30);
 
         photons.forEach(p => {
-            // Gambar jejak ekor cahaya
             ctx.fillStyle = "#f1c40f";
             ctx.shadowColor = "#f1c40f";
             ctx.shadowBlur = 8;
@@ -259,49 +238,39 @@
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            // --- LOGIKA GERAK PARTIKEL CAHAYA ---
-            // Stage 0: Lurus dari kiri ke Cermin Utama (x=730)
             if (p.stage === 0) {
                 p.x += p.speed * 3;
                 if (p.x >= 730) p.stage = 1;
             }
-            // Stage 1: Dipantulkan dari Cermin Utama ke arah fokus
             else if (p.stage === 1) {
                 if (mode === 'prime') {
-                    // Menuju sensor di (310, 175)
                     p.x -= p.speed * 2.5;
                     p.y += (175 - p.y) * 0.05;
                     if (p.x <= 310) resetPhoton(p);
                 }
                 else if (mode === 'newton') {
-                    // Menuju cermin miring di (450, 175)
                     p.x -= p.speed * 2.5;
                     p.y += (175 - p.y) * 0.05;
                     if (p.x <= 450) p.stage = 2;
                 }
                 else if (mode === 'cassegrain' || mode === 'sc') {
-                    // Menuju cermin sekunder di (310, 175)
                     p.x -= p.speed * 2.5;
                     p.y += (175 - p.y) * 0.035;
                     if (p.x <= 310) p.stage = 2;
                 }
                 else if (mode === 'schmidt') {
-                    // Menuju sensor di tengah (420, 175)
                     p.x -= p.speed * 2.5;
                     p.y += (175 - p.y) * 0.05;
                     if (p.x <= 420) resetPhoton(p);
                 }
             }
-            // Stage 2: Pantulan kedua (Khusus Newton & Cassegrain)
             else if (p.stage === 2) {
                 if (mode === 'newton') {
-                    // Pantul ke ATAS menuju eyepiece (450, 25)
                     p.y -= p.speed * 2;
                     p.x += (450 - p.x) * 0.1;
                     if (p.y <= 25) resetPhoton(p);
                 }
                 else if (mode === 'cassegrain' || mode === 'sc') {
-                    // Pantul ke BELAKANG menembus lubang menuju mata (770, 175)
                     p.x += p.speed * 2.5;
                     p.y += (175 - p.y) * 0.08;
                     if (p.x >= 770) resetPhoton(p);
@@ -318,7 +287,6 @@
         p.stage = 0;
     }
 
-    // Mulai animasi
     setMode('prime');
     animate();
 </script>
